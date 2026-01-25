@@ -1,0 +1,192 @@
+
+/* 
+Hello! Welcome to Afterfetch. 
+a: awesome
+f: fetch
+t: tool
+e: eroded in
+r: rust 
+
+This is currently Linux-only, but feel free to edit the source code
+and put in Windows compatibility.
+
+Be-ware! this project was made for fun.
+not written by a pro
+its pretty cool tho
+
+sorry for not commenting anything i just kind of got distracted and now i just looked 
+back lol uhh yeah
+
+Good Luck!
+
+-- n8t-lx
+*/
+
+use std::fs;
+use std::process::Command;
+
+fn main() {
+    println!("\x1b[34m   __ _  / _| |_ ___ _ __ \x1b[0m");
+    println!("\x1b[35m  / _` || |_| __/ _ \\ '__|\x1b[0m");
+    println!("\x1b[34m | (_| ||  _| ||  __/ |   \x1b[0m   \x1b[1mAfterfetch\x1b[0m");
+    println!("\x1b[35m  \\__,_||_|  \\__\\___|_|   \x1b[36m   Eroded in Rust\n");
+        
+        // hostnameee
+     let hostname = std::fs::read_to_string("/proc/sys/kernel/hostname")
+        .unwrap_or_else(|_| "host"
+            .to_string());
+    println!("{}", hostname.trim());
+    println!("-------------------------->");
+    // OPERATING SYSTEM CHECKS -- 
+    
+    let os = std::fs::read_to_string("/etc/os-release").expect("test"); // checks your fs, reads it.
+    let osname = os.lines() // the variable is os.lines()
+        .find(|line| line.starts_with("PRETTY_NAME")) // looks for line that begins w 'PRETTY_NAME'
+        .and_then(|line| line.split('"').nth(1)) // after that, it splits it.
+        .unwrap_or("Unknown"); // This unwraps the text, and it is sure the file is there. or, panic.
+    println!("os: {}", osname); // This prints out the OS name
+    
+    // :) 
+    
+    match osname {
+        "Arch Linux" => {
+            print!(" -- nice"); // :)
+        }
+        _ => {
+            () // Do nothing.
+        }
+    }
+    // Memory Usage
+    let memusg = std::fs::read_to_string("/proc/meminfo").expect("test");
+    let memusgd = memusg.lines()
+        .find(|line| line.starts_with("MemTotal:"))
+        .and_then(|line| line.split_whitespace().nth(1))
+        .unwrap_or("0");
+        
+    let memusg2d = memusg.lines()
+        .find(|line| line.starts_with("MemAvailable:"))
+        .and_then(|line| line.split_whitespace().nth(1))
+        .unwrap_or("0");
+    
+    
+    let memusgd2p: u32 = memusg2d.trim()
+    .parse()
+    .expect("test");
+    
+    let memusgdp: u32 = memusgd.trim()
+    .parse()
+    .expect("test");
+    
+    let formulamem = (memusgdp - memusgd2p) / 1024;
+    
+    let memusgdpdiv  = memusgdp / 1024;
+    
+    println!("ram: {formulamem} mbytes / {memusgdpdiv} mbytes");
+
+    let mut dothemathforme: f32 = 1.024;
+    dothemathforme *= 100.0;
+    if (formulamem as f32) < dothemathforme {
+        print!(" -- thats pretty low \n");
+    } 
+    
+    let uptime = std::fs::read_to_string("/proc/uptime").expect("test");
+    let uptimed: f32 = uptime.split_whitespace()
+    .next()
+    .unwrap_or("0")
+    .parse()
+    .expect("test");
+    
+    let uptimedmin: u32 = (uptimed / 60.0) as u32;
+    let remsec = uptimed % 60.0;
+    println!("uptime: {uptimedmin}min, {:.0}sec.", remsec);
+    
+    // CPU
+    let cpu = std::fs::read_to_string("/proc/cpuinfo").expect("test");
+    let cpuname = cpu.lines()
+    .find(|line| line.starts_with("model name"))
+    .and_then(|line| line.split(':').nth(1))
+    .unwrap_or("unregistered")
+    .trim();
+    
+    println!("cpu: {cpuname}");
+    
+    // GPU SEARCH
+    let vendor_id = std::fs::read_to_string("/sys/class/drm/card0/device/vendor")
+        .unwrap_or_default();
+    
+    let device_id = std::fs::read_to_string("/sys/class/drm/card0/device/device")
+        .unwrap_or_default();
+    
+    let vendor_name = match vendor_id
+    .trim()
+    {
+    "0x8086" => "intel",
+    "0x10de" => "nvidia",
+    "0x1002" => "amd",
+    _ => "unregistered",
+    };
+    println!("gpu: {vendor_name} [{}]", device_id
+        .trim());
+        
+    // kernel version!
+    let kernelv = std::fs::read_to_string("/proc/sys/kernel/osrelease")
+        .unwrap_or_else(|_| "kernel not found".to_string());
+    println!("kernel: {kernelv}");
+    
+    // user
+    let user = std::env::var("USER")
+        .unwrap_or_else(|_| "user"
+            .to_string());
+    println!("user: {user} ");
+
+    // reso
+    let reso = std::fs::read_to_string("/sys/class/graphics/fb0/virtual_size")
+        .unwrap_or_else(|_| "0x0".to_string());
+    println!("resolution: {}", reso.trim().replace(',', "x"));
+    
+    // ughhhh
+    let disk = Command::new("df")
+        .arg("-h")
+        .arg("/")
+        .output()
+        .ok()
+        .and_then(|out| String::from_utf8(out.stdout).ok())
+        .and_then(|s| {
+            s.lines()
+                .nth(1)? 
+                .split_whitespace()
+                .nth(2) 
+                .map(|val| val.to_string())
+        })
+        .unwrap_or_else(|| "0".to_string());
+
+
+    let totalgb = fahhhh();
+
+    println!("disk used: {} / {}", disk, totalgb);
+}
+    
+    
+    
+    fn fahhhh() -> String {
+    let bp = "/sys/class/block";
+
+    if let Ok(entries) = fs::read_dir(bp) {
+        for entry in entries.flatten() {
+            let name = entry.file_name();
+            let name_str = name.to_string_lossy();
+
+            if name_str.starts_with("sd") || name_str.starts_with("nvme") || name_str.starts_with("vd") {
+                let size_path = format!("{}/{}/size", bp, name_str);
+                
+                if let Ok(size_str) = fs::read_to_string(size_path) {
+                    if let Ok(sectors) = size_str.trim().parse::<u64>() {
+                        let gb = (sectors as f64 * 512.0) / 1_000_000_000.0;
+                        return format!("{:.0}gbytes", gb);
+                    }
+                }
+            }
+        }
+    }
+    "Unknown".to_string()
+}
