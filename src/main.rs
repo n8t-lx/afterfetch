@@ -169,9 +169,24 @@ let gpu_name = String::from_utf8_lossy(&output.stdout);
     println!("user: {user} ");
 
     // reso
-    let reso = std::fs::read_to_string("/sys/class/graphics/fb0/virtual_size")
-        .unwrap_or_else(|_| "0x0".to_string());
-    println!("resolution: {}", reso.trim().replace(',', "x"));
+let reso = Command::new("sh")
+    .arg("-c")
+    .arg("xrandr | grep '*' | awk '{print $1}'")
+    .output()
+    .ok()
+    .and_then(|out| {
+        let s = String::from_utf8_lossy(&out.stdout).trim().to_string();
+        if s.is_empty() { None } else { Some(s) }
+    })
+    .unwrap_or_else(|| {
+        std::fs::read_to_string("/sys/class/graphics/fb0/virtual_size")
+            .unwrap_or_else(|_| "Unknown".to_string())
+            .trim()
+            .replace(',', "x")
+    });
+
+println!("resolution: {}", reso);
+
     
     // ughhhh
     let disk = Command::new("df")
