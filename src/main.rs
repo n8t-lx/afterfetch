@@ -111,9 +111,20 @@ fn main() {
     println!("cpu: {cpuname}");
     
     // GPU SEARCH AGUGUGHGNGHGHGHG
+    let output = Command::new("sh")
+    .arg("-c")
+    .arg("lspci | grep -E 'VGA|3D' | cut -d ':' -f3")
+    .output()
+    .expect("failed to execute");
+
+let gpu_name = String::from_utf8_lossy(&output.stdout);
+
+       if !gpu_name.trim().is_empty() {
+    println!("gpu model: {}", gpu_name.trim());
+       }
+    
  let drm_path = "/sys/class/drm/";
     let mut found = false;
-
     if let Ok(entries) = fs::read_dir(drm_path) {
         for entry in entries.flatten() {
             let path = entry.path();
@@ -135,7 +146,7 @@ fn main() {
                     };
 
                     if vendor_name != "unregistered" {
-                        println!("gpu: {vendor_name} [{device_hex}] (found at {name})");
+                        println!("gpu specifics: {vendor_name} [{device_hex}] (found at {name})");
                         found = true;
                     }
                 }
