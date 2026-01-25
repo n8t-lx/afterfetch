@@ -120,7 +120,7 @@ fn main() {
 let gpu_name = String::from_utf8_lossy(&output.stdout);
 
        if !gpu_name.trim().is_empty() {
-    println!("\x1b[33mgpu model: {} \x1b[0m", gpu_name.trim());
+    println!("\x1b[33mgpu model: \x1b[0m  {} ", gpu_name.trim());
        }
     
  let drm_path = "/sys/class/drm/";
@@ -185,7 +185,7 @@ let reso = Command::new("sh")
             .replace(',', "x")
     });
 
-println!("\x1b[34mresolution: {}\x1b[0m", reso);
+println!("\x1b[34mresolution: \x1b[0m {}", reso);
 
     
     // ughhhh
