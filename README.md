@@ -11,6 +11,11 @@ then, get into that directory:
 cd afterfetch
 
 then, install it to your path:
-cargo install --path .
+cargo install --path
 
 boom. you are done. run afterfetch to run it in your terminal now!
+
+-- NOTE: YOU MIGHT NEED TO RUN THIS:
+( REPLACE ZSHRC DEPENDING ON YOUR SHELL!! e.g. bash = bashrc )
+
+echo 'export PATH$="$HOME/.cargo/bin:$PATH"' >> ~/.zshrc && source ~/.zshrc
