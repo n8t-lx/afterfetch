@@ -11,6 +11,6 @@ then, get into that directory:
 cd afterfetch
 
 then, install it to your path:
-cargo install --path
+cargo install --path .
 
 boom. you are done. run afterfetch to run it in your terminal now!
