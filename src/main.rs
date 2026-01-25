@@ -44,7 +44,7 @@ fn main() {
         .find(|line| line.starts_with("PRETTY_NAME")) // looks for line that begins w 'PRETTY_NAME'
         .and_then(|line| line.split('"').nth(1)) // after that, it splits it.
         .unwrap_or("Unknown"); // This unwraps the text, and it is sure the file is there. or, panic.
-    println!("\x1b[34mos: {} \x1b[0m", osname); // This prints out the OS name
+    println!("\x1b[34mos: \x1b[0m {} ", osname); // This prints out the OS name
     
     // :) 
     
