@@ -110,24 +110,42 @@ fn main() {
     
     println!("cpu: {cpuname}");
     
-    // GPU SEARCH
-    let vendor_id = std::fs::read_to_string("/sys/class/drm/card0/device/vendor")
-        .unwrap_or_default();
-    
-    let device_id = std::fs::read_to_string("/sys/class/drm/card0/device/device")
-        .unwrap_or_default();
-    
-    let vendor_name = match vendor_id
-    .trim()
-    {
-    "0x8086" => "intel",
-    "0x10de" => "nvidia",
-    "0x1002" => "amd",
-    _ => "unregistered",
-    };
-    println!("gpu: {vendor_name} [{}]", device_id
-        .trim());
-        
+    // GPU SEARCH AGUGUGHGNGHGHGHG
+ let drm_path = "/sys/class/drm/";
+    let mut found = false;
+
+    if let Ok(entries) = fs::read_dir(drm_path) {
+        for entry in entries.flatten() {
+            let path = entry.path();
+            let name = path.file_name().unwrap().to_string_lossy();
+
+            if name.starts_with("card") && !name.contains('-') {
+                let vendor_file = path.join("device/vendor");
+                let device_file = path.join("device/device");
+
+                if let (Ok(v_id), Ok(d_id)) = (fs::read_to_string(vendor_file), fs::read_to_string(device_file)) {
+                    let vendor_hex = v_id.trim();
+                    let device_hex = d_id.trim();
+
+                    let vendor_name = match vendor_hex {
+                        "0x8086" => "intel",
+                        "0x10de" => "nvidia",
+                        "0x1002" | "0x1022" => "amd", 
+                        _ => "unregistered",
+                    };
+
+                    if vendor_name != "unregistered" {
+                        println!("gpu: {vendor_name} [{device_hex}] (found at {name})");
+                        found = true;
+                    }
+                }
+            }
+        }
+    }
+
+    if !found {
+        println!("gpu: unregistered [none]");
+    }
     // kernel version!
     let kernelv = std::fs::read_to_string("/proc/sys/kernel/osrelease")
         .unwrap_or_else(|_| "kernel not found".to_string());
