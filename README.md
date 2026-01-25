@@ -1,7 +1,7 @@
 # afterfetch
 a: awesome f: fetch t: tool e: eroded in r: rust! afterfetch!
 
-LINUX ONLY!!
+LINUX ONLY!! works best with x11 for display read
 
 INSTALLATION:
 clone the repo:
