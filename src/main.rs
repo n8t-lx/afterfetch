@@ -44,7 +44,7 @@ fn main() {
         .find(|line| line.starts_with("PRETTY_NAME")) // looks for line that begins w 'PRETTY_NAME'
         .and_then(|line| line.split('"').nth(1)) // after that, it splits it.
         .unwrap_or("Unknown"); // This unwraps the text, and it is sure the file is there. or, panic.
-    println!("os: {}", osname); // This prints out the OS name
+    println!("\x1b[34mos: {} \x1b[0m", osname); // This prints out the OS name
     
     // :) 
     
@@ -81,7 +81,7 @@ fn main() {
     
     let memusgdpdiv  = memusgdp / 1024;
     
-    println!("ram: {formulamem} mbytes / {memusgdpdiv} mbytes");
+    println!("\x1b[35mram: \x1b[0m {formulamem} mbytes / {memusgdpdiv} mbytes");
 
     let mut dothemathforme: f32 = 1.024;
     dothemathforme *= 100.0;
@@ -98,7 +98,7 @@ fn main() {
     
     let uptimedmin: u32 = (uptimed / 60.0) as u32;
     let remsec = uptimed % 60.0;
-    println!("uptime: {uptimedmin}min, {:.0}sec.", remsec);
+    println!("\x1b[34muptime: \x1b[0m {uptimedmin}min, {:.0}sec.", remsec);
     
     // CPU
     let cpu = std::fs::read_to_string("/proc/cpuinfo").expect("test");
@@ -108,7 +108,7 @@ fn main() {
     .unwrap_or("unregistered")
     .trim();
     
-    println!("cpu: {cpuname}");
+    println!("\x1b[35mcpu: \x1b[0m {cpuname}");
     
     // GPU SEARCH AGUGUGHGNGHGHGHG
     let output = Command::new("sh")
@@ -120,7 +120,7 @@ fn main() {
 let gpu_name = String::from_utf8_lossy(&output.stdout);
 
        if !gpu_name.trim().is_empty() {
-    println!("gpu model: {}", gpu_name.trim());
+    println!("\x1b[33mgpu model: {} \x1b[0m", gpu_name.trim());
        }
     
  let drm_path = "/sys/class/drm/";
@@ -146,7 +146,7 @@ let gpu_name = String::from_utf8_lossy(&output.stdout);
                     };
 
                     if vendor_name != "unregistered" {
-                        println!("gpu specifics: {vendor_name} [{device_hex}] (found at {name})");
+                        println!("\x1b[32mgpu specifics: \x1b[0m {vendor_name} [{device_hex}] (found at {name})");
                         found = true;
                     }
                 }
@@ -160,13 +160,13 @@ let gpu_name = String::from_utf8_lossy(&output.stdout);
     // kernel version!
     let kernelv = std::fs::read_to_string("/proc/sys/kernel/osrelease")
         .unwrap_or_else(|_| "kernel not found".to_string());
-    println!("kernel: {kernelv}");
+    println!("\x1b[31mkernel: \x1b[0m {kernelv}");
     
     // user
     let user = std::env::var("USER")
         .unwrap_or_else(|_| "user"
             .to_string());
-    println!("user: {user} ");
+    println!("\x1b[35muser: \x1b[0m {user} ");
 
     // reso
 let reso = Command::new("sh")
@@ -185,7 +185,7 @@ let reso = Command::new("sh")
             .replace(',', "x")
     });
 
-println!("resolution: {}", reso);
+println!("\x1b[34mresolution: {}\x1b[0m", reso);
 
     
     // ughhhh
@@ -207,7 +207,7 @@ println!("resolution: {}", reso);
 
     let totalgb = fahhhh();
 
-    println!("disk used: {} / {}", disk, totalgb);
+    println!("\x1b[37mdisk used: {} / {} \x1b[0m", disk, totalgb);
 }
     
     
