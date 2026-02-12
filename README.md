@@ -12,7 +12,7 @@ git clone https://github.com/n8t-lx/afterfetch
  cd afterfetch 
 
 #then, install it to your path:
- cargo install --path . <- do NOT forget the dot 
+ cargo install --path . # <- do NOT forget the dot 
 
 #boom. you are done. run afterfetch to run it in your terminal now!
 
