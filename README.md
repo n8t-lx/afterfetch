@@ -5,7 +5,7 @@ LINUX ONLY!! works best with x11 for display read
 
 INSTALLATION:
 clone the repo:
-```git git clone https://github.com/n8t-lx/afterfetch ```
+```bash git clone https://github.com/n8t-lx/afterfetch ```
 
 then, get into that directory:
 ```bash cd afterfetch ```
