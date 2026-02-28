@@ -19,4 +19,5 @@ git clone https://github.com/n8t-lx/afterfetch
 #-- NOTE: YOU MIGHT NEED TO RUN THIS:
 #( REPLACE ZSHRC DEPENDING ON YOUR SHELL!! e.g. bash = bashrc )
 
- echo 'export PATH$="$HOME/.cargo/bin:$PATH"' >> ~/.zshrc && source ~/.zshrc ```
+echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> ~/.zshrc && source ~/.zshrc
+
